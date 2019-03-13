@@ -19,6 +19,12 @@ class OeBB:
         return json.loads(r.text)
 
     def connections(self, origin, destination, date=datetime.now(), opt=None):
+           
+        if isinstance(origin, dict):
+             origin = origin['number']
+        if isinstance(destination, dict):
+             destination = destination['number']
+    
         default = {'reverse': False,
                    'datetimeDeparture': date.strftime("%Y-%m-%dT%H:%M:00.000"),
                    'filter': {'regionaltrains': False,
@@ -57,8 +63,8 @@ class OeBB:
                                    'useTripartFilter': False,
                                    'noVbxFilter': False,
                                    'noCategoriesFilter': False},
-                   'from': {'number': origin['number']},
-                   'to': {'number': destination['number']},
+                   'from': {'number': origin},
+                   'to': {'number': destination},
                    'timeout': {}}
         if type(opt) == dict:
             default.update(opt)
