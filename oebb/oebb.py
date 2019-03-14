@@ -18,7 +18,7 @@ class OeBB:
                                        'name': str(name)})
         return json.loads(r.text)
 
-    def connections(self, origin, destination, date=datetime.now(), opt=None):
+    def connections(self, origin, destination, date=datetime.now(), count=5, opt=None):
            
         if isinstance(origin, dict):
              origin = origin['number']
@@ -55,7 +55,7 @@ class OeBB:
                            'passengerDeletable': True,
                        }
                    ],
-                   'count': 5,
+                   'count': count,
                    'debugFilter': {'noAggregationFilter': False,
                                    'noEqclassFilter': False,
                                    'noNrtpathFilter': False,
