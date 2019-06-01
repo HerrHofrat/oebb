@@ -3,13 +3,17 @@ import json
 from datetime import datetime
 from time import time
 import os
+import logging
+
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class OeBB:
     def __init__(self, cookie_keep_time=2300, auto_auth=True):
         self.session_keep_time = min(cookie_keep_time, 2300)
         self.session_expires = 0
-        self.headers = {'Channel': 'inet'}
+        self.headers = {'Channel': 'inet', 'User-Agent' : 'Mozilla/5.0'}
         self.auto_auth = auto_auth
 
     def stations(self, name=''):
@@ -112,7 +116,7 @@ class OeBB:
 
     def auth(self):
         r = requests.get('https://tickets.oebb.at/api/domain/v3/init',
-                         headers={'Channel': 'inet'},
+                         headers=self.headers,
                          params={'userId': self._generate_uid()})
         r = json.loads(r.text)
         self.headers.update({'AccessToken': r['accessToken'],
