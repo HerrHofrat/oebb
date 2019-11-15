@@ -24,10 +24,10 @@ class OeBB:
 
     def connections(self, origin, destination, date=datetime.now(), count=5, opt=None):
            
-        if isinstance(origin, dict):
-             origin = origin['number']
-        if isinstance(destination, dict):
-             destination = destination['number']
+        if origin['name'] == "":
+             origin['name'] = origin['meta']
+        if destination['name'] == "":
+             destination['name'] = destination['meta']
     
         default = {'reverse': False,
                    'datetimeDeparture': date.strftime("%Y-%m-%dT%H:%M:00.000"),
@@ -67,13 +67,14 @@ class OeBB:
                                    'useTripartFilter': False,
                                    'noVbxFilter': False,
                                    'noCategoriesFilter': False},
-                   'from': {'number': origin},
-                   'to': {'number': destination},
+                   'from': origin,
+                   'to': destination,
                    'timeout': {}}
         if type(opt) == dict:
             default.update(opt)
         r = self._make_request('https://tickets.oebb.at/api/hafas/v4/timetable',
                                data=default)
+        
         return json.loads(r.text)['connections']
 
     def next_connections(self, connection, opt=None):
